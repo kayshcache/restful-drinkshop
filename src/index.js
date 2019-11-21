@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import routes from './src/routes/drinkshopRoutes';
+import routes from './routes/drinkshopRoutes';
 
 dotenv.config();
 

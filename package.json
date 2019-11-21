@@ -2,9 +2,9 @@
   "name": "restful-drinkshop",
   "version": "1.0.0",
   "description": "Coder Drinkshop App",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node -e js"
+    "start": "nodemon ./src/index.js --exec babel-node -e js"
   },
   "repository": {
     "type": "git",
