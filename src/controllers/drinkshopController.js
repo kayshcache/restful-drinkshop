@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { ProductSchema } from '../models/drinkshopModels';
+import { body, validationResult } from 'express-validator';
+import { sanitizeBody } from 'express-validator';
 
 const Product = mongoose.model('Product', ProductSchema);
 
@@ -51,3 +53,35 @@ export const deleteProduct = (req, res) => {
 		res.json({ message: 'Successfully deleted product' });
 	})
 }
+
+export const createProductGet = (req, res, next) => {
+	res.render('new-product-form', {title: 'Add Product'});
+}
+
+export const createProductPost = [
+	body('name', 'Product name required').isLength({ min: 1 }).trim(),
+	sanitizeBody('name').trim().escape(),
+	(req, res, next) => {
+       		const errors = validationResult(req);
+    		let newProduct = new Product({
+       			name: req.body.name
+   		});
+   		if (!errors.isEmpty()) {
+        		res.render('genre_form', {
+            			title: 'Add Product',
+            			product: product,
+            			errors: errors.array()
+        		});
+        	return;
+    		} else {
+        	// form data is valid
+			newProduct.save((err, product) => {
+               			if (err) {
+                        		res.send(err);
+                		}
+                		res.json(product);
+        		});
+    		}
+	}
+
+];
