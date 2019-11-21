@@ -12,7 +12,7 @@ const DB_CREDENTIALS = process.env.DB_CREDENTIALS;
 
 // Mongoose connection
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${DB_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net/test?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://${DB_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net/restful-drinkshop?retryWrites=true&w=majority`, {
 	useUnifiedTopology: true,
 	useNewUrlParser: true,
 });
