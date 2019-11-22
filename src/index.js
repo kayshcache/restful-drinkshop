@@ -26,11 +26,11 @@ app.use(bodyParser.json());
 // CORS for frontend to access API
 app.use(cors({origin: 'http://localhost:8081'}));
 
-routes(app);
-
 // Serving static files
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static('public'));
+
+routes(app);
 
 app.get('/', (req, res) =>
 	res.send(`Node and express server running on port ${PORT} - living in a docker submarine, a docker submarine~`)
@@ -39,6 +39,4 @@ app.get('/', (req, res) =>
 app.listen(PORT, () =>
 	console.log(`Your server is running on port ${PORT}`)
 );
-
-// CORS for frontend to access API:
 

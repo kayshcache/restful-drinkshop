@@ -32,3 +32,20 @@ const appendListItemsToDom = productObject => {
 
 getRequestFrom(api).then(products => products.map(appendListItemsToDom));
 
+
+// Now do the same thing underneith with fetch
+const appendFetch = productObject => {
+        const menu = document.querySelector('#fetch-menu')
+        const item = document.createElement('li')
+        item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
+        menu.appendChild(item);
+        return item;
+}
+
+async function displayMenu(){
+	const response = await fetch(api);
+	const productList = await response.json();
+	const products = productList.map(appendFetch);
+}
+
+displayMenu()
