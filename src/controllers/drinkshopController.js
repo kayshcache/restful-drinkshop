@@ -44,10 +44,14 @@ export const updateProduct = (req, res) => {
 }
 
 export const deleteProduct = (req, res) => {
-	Product.remove({ _id: req.params.productId }, (err, product) => {
+	Product.deleteOne({ _id: req.params.productId }, (err, product) => {
 		if (err) {
 			res.send(err);
 		}
 		res.json({ message: 'Successfully deleted product' });
 	})
+}
+
+export const getTotalCost = (req, res) => {
+//	populate "https://mongoosejs.com/docs/populate.html"
 }
