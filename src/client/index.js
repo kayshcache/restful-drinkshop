@@ -11,25 +11,24 @@ linkItem.appendChild(price);
 menuList.innerHTML = '<li>Will display a list of menu items</li>'
 */
 
-const createItems = (productsArray) => {
-	return productsArray.map(productObject => {
-                const menuList = document.querySelector('ul')
-                const item = document.createElement('li')
-                item.textContent = `${productObject.title}: $${productObject.price}`;
-                menuList.appendChild(item);
-	});
-}
-
 const api = 'http://localhost:9001/';
 
-const getProductList = (api) => {
+const getRequestFrom = url => {
 	return new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
-		xhr.open("GET", api);
+		xhr.open("GET", url);
 		xhr.onload = () => resolve(JSON.parse(xhr.response));
 		xhr.onerror = () => reject(xhr.statusText);
 		xhr.send();
 	});
 }
-getProductList(api).then(products => createItems(products));
+
+const appendListItemsToDom = productObject => {
+        const menu = document.querySelector('ul')
+        const item = document.createElement('li')
+        item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
+        menu.appendChild(item);
+}
+
+getRequestFrom(api).then(products => products.map(appendListItemsToDom));
 
