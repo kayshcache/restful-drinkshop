@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import { ProductSchema } from '../models/drinkshopModels';
+import { ProductSchema, CustomerSchema } from '../models/drinkshopModels';
 
 const Product = mongoose.model('Product', ProductSchema);
+const Customer = mongoose.model('Customer', CustomerSchema);
 
 export const addNewProduct = (req, res) => {
 	let newProduct = new Product(req.body);
@@ -32,16 +33,16 @@ export const getProductWithId = (req, res) => {
 		}
 		res.json(product);
 	});
-}
+};
 
 export const updateProduct = (req, res) => {
-	Product.findOneAndUpdate({ _id: req.params.productId }, req.body, { new: true }, (err, product) => {	
+	Product.findOneAndUpdate({ _id: req.params.productId }, req.body, { new: true }, (err, product) => {
 		if (err) {
-                        res.send(err);
-                }
-                res.json(product);
+			res.send(err);
+		}
+		res.json(product);
 	});
-}
+};
 
 export const deleteProduct = (req, res) => {
 	Product.deleteOne({ _id: req.params.productId }, (err, product) => {
@@ -49,9 +50,29 @@ export const deleteProduct = (req, res) => {
 			res.send(err);
 		}
 		res.json({ message: 'Successfully deleted product' });
-	})
-}
+	});
+};
 
 export const getTotalCost = (req, res) => {
-//	populate "https://mongoosejs.com/docs/populate.html"
+	//	populate "https://mongoosejs.com/docs/populate.html"
+
+};
+
+export const getCustomers = (req, res) => {
+	Customer.find({}, (err, customer) => {
+		if (err) {
+			res.send(err);
+		}
+		res.json(customer);
+	});
+
+};
+
+export const getCustomerByEmail = (req, res) => {
+	Customer.findOne({ "email": req.params.customerId }, (err, customer) => {
+		if (err) {
+			res.send(err);
+		}
+		res.json(customer);
+	});
 }

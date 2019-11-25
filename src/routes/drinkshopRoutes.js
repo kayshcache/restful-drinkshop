@@ -1,4 +1,5 @@
-import { addNewProduct, getProducts, getProductWithId, updateProduct, deleteProduct} from '../controllers/drinkshopController';
+import { addNewProduct, getProducts, getProductWithId, updateProduct, deleteProduct } from '../controllers/drinkshopController';
+import { getCustomers, getCustomerByEmail } from '../controllers/drinkshopController';
 
 const routes = (app) => {
 	/* Drinkshop Home Route
@@ -9,27 +10,41 @@ const routes = (app) => {
 	 * mongoDB collection
 	 * 
 	 * */
-	app.route('/')
-	.get((req, res, next) => {
-		// Middleware
-		console.log(`Request from: ${req.originalUrl}`)
-		console.log(`Request type: ${req.method}`)
-		next();
-	}, getProducts)
+	app.route('/products')
+		.get((req, res, next) => {
+			// Middleware
+			console.log(`Request from: ${req.originalUrl}`);
+			console.log(`Request type: ${req.method}`);
+			next();
+		}, getProducts)
 
-	// Products - POST endpoint
-	.post(addNewProduct);
+		// Products - POST endpoint
+		.post(addNewProduct);
 
-	app.route('/:productId')
+	app.route('/products/:productId')
 
-	// Products ID - GET specific contact by id
-	.get(getProductWithId)
+		// Products ID - GET specific contact by id
+		.get(getProductWithId)
 
-	// Product ID - PUT request
-	.put(updateProduct)
+		// Product ID - PUT request
+		.put(updateProduct)
 
-	// Product id - DELETE request
-	.delete(deleteProduct)
-}
+		// Product id - DELETE request
+		.delete(deleteProduct);
+
+	app.route('/customers/')
+		.get((req, res, next) => {
+			// Middleware
+			console.log(`Request from: ${req.originalUrl}`);
+			console.log(`Request type: ${req.method}`);
+			next();
+		}, getCustomers)
+	// could add new customers here with .post(addNewCustomer);
+	// maybe later
+	;
+	app.route('/customers/:customerId')
+		.get(getCustomerByEmail);
+
+};
 
 export default routes;

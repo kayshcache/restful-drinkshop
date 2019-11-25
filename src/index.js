@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import favicon from 'express-favicon';
+// import favicon from 'express-favicon';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import routes from './routes/drinkshopRoutes';
@@ -23,11 +23,11 @@ mongoose.connect(`mongodb+srv://${DB_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net/re
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// CORS for frontend to access API
-app.use(cors({origin: 'http://localhost:8081'}));
+// CORS fix for dummy vanilla js frontend to access API
+app.use(cors({origin: 'http://localhost:8080'}));
 
 // Serving static files
-app.use(favicon(__dirname + '/public/favicon.ico'));
+// app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(express.static('public'));
 
 routes(app);
