@@ -1,16 +1,5 @@
 'use strict'
 
-/*
-const menuList = document.querySelector('ul');
-const item = document.createElement('li')
-item.textContent = "Example product: ";
-menuList.appendChild(item);
-const linkItem = document.querySelector('li');
-const price = document.createTextNode('$4.99');
-linkItem.appendChild(price);
-menuList.innerHTML = '<li>Will display a list of menu items</li>'
-*/
-
 const api = 'http://localhost:9001';
 
 const getRequestFrom = (url, route) => {
@@ -24,41 +13,29 @@ const getRequestFrom = (url, route) => {
 	});
 }
 
-const fetchFrom = async (api, route, callback) => {
-	const uri = api + route;
-	const response = await fetch(uri);
-	const responseJson = await response.json();
-	const contents = responseJson.map(callback);
-}
-
 /* Display Customers and their orders
  **
  **
  **
  */
-const formatAddress = address => {
-	const { streetNumber, street, city, postcode } = address;
-	return `${streetNumber} ${street}, ${city}, ${postcode}`;
-}
 
-const createCustomerList = customerObject => {
+const createOrderList = customerObject => {
 	// Disect the customerObject from response JSON
 	const email = customerObject.email;
 	const details = customerObject[email];
-	const address = formatAddress(details.address);
 	const orders = details.orders.map(order => order.id).toString();
 
 	// Query and create list items for DOM
 	const allCustomers = document.querySelector('ol')
 	const customer = document.createElement('li')
-	const customerDetails = document.createElement('ul')
+	const customerDetails = document.createElement('ol')
 	const detailItems = document.createDocumentFragment()
 
 	customer.textContent = details.firstName;
 
-	[email, address, orders, ].map(detail => {
+	details.orders.map(order => {
 		const element = document.createElement('li');
-		element.textContent = detail;
+		element.textContent = order.id + ": Next up, get total prices";
 		detailItems.appendChild(element);
 	})
 
@@ -68,4 +45,4 @@ const createCustomerList = customerObject => {
 }
 
 getRequestFrom(api, '/customers/')
-	.then(customers => customers.map(createCustomerList));
+	.then(customers => customers.map(createOrderList));
