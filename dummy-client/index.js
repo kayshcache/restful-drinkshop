@@ -11,7 +11,7 @@ linkItem.appendChild(price);
 menuList.innerHTML = '<li>Will display a list of menu items</li>'
 */
 
-const api = 'http://localhost:9001';
+const api = 'http://localhost:3000';
 
 const getRequestFrom = (url, route) => {
 	const uri = url + route;
@@ -36,16 +36,73 @@ const fetchFrom = async (api, route, callback) => {
  **
  **
  */
-const createCustomerList = customerObject => {
-	const menu = document.querySelector('ul')
-	const item = document.createElement('li')
-	item.textContent = `${customerObject.email}: $${customerObject[customerObject.email].firstName}`;
-	menu.appendChild(item);
+const formatAddress = address => {
+        const { streetNumber, street, city, postcode } = address;
+        return `${streetNumber} ${street}, ${city}, ${postcode}`;
 }
 
-getRequestFrom(api, '/customers/')
-	.then(customers => customers.map(appendListItemsToDom));
+const createCustomerList = customerObject => {
+        // Disect the customerObject from response JSON
+        const email = customerObject.email;
+        const details = customerObject[email];
+        const address = formatAddress(details.address);
+        const orders = details.orders.map(order => order.id).toString();
 
+        // Query and create list items for DOM
+        const allCustomers = document.querySelector('#customers')
+        const customer = document.createElement('li')
+        const customerDetails = document.createElement('ul')
+        const detailItems = document.createDocumentFragment()
+
+        customer.textContent = details.firstName;
+
+        [email, address, orders, ].map(detail => {
+                const element = document.createElement('li');
+                element.textContent = detail;
+                detailItems.appendChild(element);
+        })
+
+        customerDetails.appendChild(detailItems);
+        customer.appendChild(customerDetails)
+        allCustomers.appendChild(customer);
+}
+
+// getRequestFrom(api, '/customers/')
+//        .then(customers => customers.map(createCustomerList));
+
+/* Display orders
+ **
+ **
+ **
+ */
+
+const createOrderList = customerObject => {
+        // Disect the customerObject from response JSON
+        const email = customerObject.email;
+        const details = customerObject[email];
+        const orders = details.orders.map(order => order.id).toString();
+
+        // Query and create list items for DOM
+        const allCustomers = document.querySelector('#orders')
+        const customer = document.createElement('li')
+        const customerDetails = document.createElement('ol')
+        const detailItems = document.createDocumentFragment()
+
+        customer.textContent = details.firstName;
+
+        details.orders.map(order => {
+                const element = document.createElement('li');
+                element.textContent = order.id + ": Next up, get total prices";
+                detailItems.appendChild(element);
+        })
+
+        customerDetails.appendChild(detailItems);
+        customer.appendChild(customerDetails)
+        allCustomers.appendChild(customer);
+}
+
+// getRequestFrom(api, '/customers/')
+ //       .then(customers => customers.map(createOrderList));
 
 /* Display Menu on homepage
  **
@@ -53,14 +110,14 @@ getRequestFrom(api, '/customers/')
  **
  */
 const appendListItemsToDom = productObject => {
-	const menu = document.querySelector('ul')
+	const menu = document.querySelector('#xhr-menu')
 	const item = document.createElement('li')
 	item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
 	menu.appendChild(item);
 }
 
-getRequestFrom(api, '/products/')
-	.then(products => products.map(appendListItemsToDom));
+//getRequestFrom(api, '/products/')
+//	.then(products => products.map(appendListItemsToDom));
 
 
 /* Now do the same thing underneith with fetch
@@ -80,4 +137,23 @@ const displayMenu = async () => {
 	const products = productList.map(appendFetch);
 }
 
-displayMenu();
+//displayMenu();
+
+switch (location.pathname) {	
+	case '/':
+		getRequestFrom(api, '/products/')
+	        .then(products => products.map(appendListItemsToDom));
+		displayMenu();
+		break;
+	case '/customers.html':
+		getRequestFrom(api, '/customers/')
+		.then(customers => customers.map(createCustomerList));
+		break;
+	case '/orders.html':
+		getRequestFrom(api, '/customers/')
+                .then(customers => customers.map(createOrderList));
+                break;
+	default:
+		console.log('something is up with the switch');
+}
+
