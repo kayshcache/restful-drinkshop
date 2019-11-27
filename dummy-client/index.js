@@ -42,7 +42,7 @@ const formatAddress = address => {
 }
 
 const createCustomerList = customerObject => {
-        // Disect the customerObject from response JSON
+        // Dissect the customerObject from response JSON
         const email = customerObject.email;
         const details = customerObject[email];
         const address = formatAddress(details.address);
@@ -66,9 +66,6 @@ const createCustomerList = customerObject => {
         customer.appendChild(customerDetails)
         allCustomers.appendChild(customer);
 }
-
-// getRequestFrom(api, '/customers/')
-//        .then(customers => customers.map(createCustomerList));
 
 /* Display orders
  **
@@ -101,9 +98,6 @@ const createOrderList = customerObject => {
         allCustomers.appendChild(customer);
 }
 
-// getRequestFrom(api, '/customers/')
- //       .then(customers => customers.map(createOrderList));
-
 /* Display Menu on homepage
  **
  **
@@ -115,9 +109,6 @@ const appendListItemsToDom = productObject => {
 	item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
 	menu.appendChild(item);
 }
-
-//getRequestFrom(api, '/products/')
-//	.then(products => products.map(appendListItemsToDom));
 
 
 /* Now do the same thing underneith with fetch
@@ -136,8 +127,6 @@ const displayMenu = async () => {
 	const productList = await response.json();
 	const products = productList.map(appendFetch);
 }
-
-//displayMenu();
 
 switch (location.pathname) {	
 	case '/':
