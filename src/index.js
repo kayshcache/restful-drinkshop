@@ -1,9 +1,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-// import favicon from 'express-favicon';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+import mysql from 'mysql2';
 import routes from './routes/drinkshopRoutes';
 
 dotenv.config();
@@ -19,9 +18,25 @@ mongoose.connect(`mongodb+srv://${DB_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net/re
 	useNewUrlParser: true,
 });
 
+// MySQL connection
+const sqlConnection = mysql.createConnection({
+	host: 'localhost',
+	port: '3406',
+	user: 'root',
+	password: 'thepassword',
+	database: 'drinkshop_schema',
+});
+
+sqlConnection.connect(err => {
+	if (err) throw err;
+	console.time('mysql');
+	console.log('Successfully connected to mysql');
+	sqlConnection.end();
+});
+
 // Body Parser setup
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // CORS fix for dummy vanilla js frontend to access API
 app.use(cors({origin: 'http://localhost:8080'}));

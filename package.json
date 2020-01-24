@@ -1,10 +1,12 @@
 {
   "name": "restful-drinkshop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Coder Drinkshop App",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon ./src/index.js --exec babel-node -e js"
+    "start": "nodemon ./src/index.js --exec babel-node -e js",
+    "pullmysql": "docker pull mysql",
+    "mysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=thepassword -d mysql"
   },
   "repository": {
     "type": "git",
@@ -17,13 +19,12 @@
   },
   "homepage": "https://github.com/kayshcache/restful-drinkshop#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-favicon": "^2.0.1",
     "mongodb": "^3.3.4",
     "mongoose": "^5.7.10",
+    "mysql2": "^2.1.0",
     "nodemon": "^1.19.4"
   },
   "devDependencies": {
