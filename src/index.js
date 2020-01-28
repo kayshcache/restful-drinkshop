@@ -19,7 +19,7 @@ mongoose.connect(`mongodb+srv://${MONGO_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net
 	useNewUrlParser: true,
 });
 
-//  MySQL connection
+//  MySQL create database and fill with tables
 buildDatabase.createDatabase();
 buildDatabase.createTables();
 
@@ -36,10 +36,10 @@ app.use(express.static('public'));
 routes(app);
 
 app.get('/', (req, res) =>
-	res.send(`Node and express server running on port ${PORT} - living in a docker submarine, a docker submarine~`)
+	res.send(`To access client go to http://localhost port 80 in the browser`)
 );
 
 app.listen(PORT, () =>
-	console.log(`The server is running on port ${PORT}`)
+	console.log(`API is running on port ${PORT}`)
 );
 

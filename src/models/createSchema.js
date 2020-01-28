@@ -18,6 +18,7 @@ function dbClosureFunction() {
 			});
 		});
 	}
+
 	function createTables() {
 		const cloudDb = mysql.createConnection({multipleStatements: true, database: dbName, ...settings});
 		const sql = `
