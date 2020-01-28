@@ -4,6 +4,7 @@
   "description": "Coder Drinkshop App",
   "main": "src/index.js",
   "scripts": {
+    "babel-node": "babel-node --presets=@babel/preset-env",
     "start": "nodemon ./src/index.js --exec babel-node -e js",
     "dummy": "http-server ./dummy-client -p 80",
     "dockmysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=thepassword -d mysql"
@@ -28,9 +29,10 @@
     "nodemon": "^1.19.4"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
     "http-server": "^0.12.1"
   }
 }

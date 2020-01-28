@@ -14,7 +14,7 @@ function dbClosureFunction() {
 		cloudDb.connect(err => {
 			cloudDb.query("CREATE DATABASE IF NOT EXISTS test", (err, result) => {
 				if (err) throw err;
-				console.log("db created with a closure");
+				console.log("Database - check!");
 			});
 		});
 	}
@@ -53,7 +53,7 @@ function dbClosureFunction() {
 		cloudDb.connect(err => {
 			cloudDb.query(sql, (err, result) => {
 				if (err) throw err;
-				console.log("Tables Created Successfully!");
+				console.log("Tables schema - check!");
 			});
 		});
 	}
