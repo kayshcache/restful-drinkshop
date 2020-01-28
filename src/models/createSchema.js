@@ -3,48 +3,63 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const sqlConnection = mysql.createConnection(JSON.parse(process.env.MYSQL_CREDENTIALS));
-export const closureBuild = dbFunction();
+const settings = JSON.parse(process.env.MYSQL_CREDENTIALS);
+const dbName = "drinkshop"
+const buildDatabase = dbClosureFunction();
+export default buildDatabase;
 
-function dbFunction() {
-	function closedFunction() {
-		sqlConnection.connect(err => {
-			sqlConnection.query("CREATE DATABASE IF NOT EXISTS test", (err, result) => {
+function dbClosureFunction() {
+	function createDatabase() {
+		const cloudDb = mysql.createConnection(settings);
+		cloudDb.connect(err => {
+			cloudDb.query("CREATE DATABASE IF NOT EXISTS test", (err, result) => {
 				if (err) throw err;
 				console.log("db created with a closure");
 			});
 		});
 	}
-	function secondClosure() {
-		sqlConnection.connect(err => {
-			sqlConnection.query("CREATE DATABASE IF NOT EXISTS test2", (err, result) => {
+	function createTables() {
+		const cloudDb = mysql.createConnection({multipleStatements: true, database: dbName, ...settings});
+		const sql = `
+			CREATE TABLE IF NOT EXISTS products (
+			  product_id INT AUTO_INCREMENT PRIMARY KEY,
+			  title VARCHAR(45),
+			  price DECIMAL(4,2)
+			);
+
+			CREATE TABLE IF NOT EXISTS customers (
+			  customer_id INT AUTO_INCREMENT PRIMARY KEY,
+			  email VARCHAR(255) NOT NULL UNIQUE,
+			  name VARCHAR(255) NOT NULL,
+			  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			  address VARCHAR(255) DEFAULT NULL
+			);
+
+			CREATE TABLE IF NOT EXISTS orders (
+			  order_id INT AUTO_INCREMENT PRIMARY KEY,
+			  customer_id INT NOT NULL,
+			  status VARCHAR(45) NULL DEFAULT 'processing',
+			  customer_notes VARCHAR(255) NULL
+			);
+
+			CREATE TABLE IF NOT EXISTS orders_products (
+			  orders_products_id INT PRIMARY KEY AUTO_INCREMENT,
+			  order_id INT NULL,
+			  product_id INT NULL,
+			  quantity INT NULL
+			);
+		`;
+		cloudDb.connect(err => {
+			cloudDb.query(sql, (err, result) => {
 				if (err) throw err;
-				console.log("second db created with a closure");
+				console.log("Tables Created Successfully!");
 			});
 		});
 	}
 
 	return {
-		closedFunction,
-		secondClosure,
+		createDatabase,
+		createTables,
 	};
 }
 
-function createDatabase(err) {
-	if (err) throw err;
-	console.log("connected!");
-	sqlConnection.query("CREATE DATABASE IF NOT EXISTS drinkshop", (err, result) => {
-		if (err) throw err;
-		console.log("Database created");
-	});
-	sqlConnection.end();
-}
-
-function createTables(err) {
-	if (err) throw err;
-	sqlConnection.query(`
-		
-	`, (err, result) => {
-	});
-	sqlConnection.end();
-}
