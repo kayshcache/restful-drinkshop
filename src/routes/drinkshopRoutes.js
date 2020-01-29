@@ -1,5 +1,6 @@
 import { addNewProduct, getProducts, getProductWithId, updateProduct, deleteProduct } from '../controllers/drinkshopController';
 import { getCustomers, getCustomerByEmail } from '../controllers/drinkshopController';
+import { cruds } from '../controllers/mysqlControllers';
 
 const routes = (app) => {
 	/* Drinkshop Home Route
@@ -12,7 +13,7 @@ const routes = (app) => {
 	 * */
 	app.route('/products')
 		.get((req, res, next) => {
-			// Middleware
+			// Customer Middleware can go here too!
 			console.log(`Request from: ${req.originalUrl}`);
 			console.log(`Request type: ${req.method}`);
 			next();
