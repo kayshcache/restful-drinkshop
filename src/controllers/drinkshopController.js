@@ -1,10 +1,16 @@
 import mongoose from 'mongoose';
 import { ProductSchema, CustomerSchema } from '../models/drinkshopModels';
+import cruds from './mysqlControllers';
+
+// Assign the closure function object to db - holds all the CRUD tools for reading
+// and writing the MySQL database.
+const db = cruds();
 
 const Product = mongoose.model('Product', ProductSchema);
 const Customer = mongoose.model('Customer', CustomerSchema);
 
 export const addNewProduct = (req, res) => {
+	db.insertProduct(req.body);
 	let newProduct = new Product(req.body);
 
 	newProduct.save((err, product) => {

@@ -9,6 +9,8 @@ import buildDatabase from './models/createSchema';
 dotenv.config();
 
 const app = express();
+const dbName = 'drinkshop';
+const db = buildDatabase(dbName);
 const PORT = 3000;
 const MONGO_CREDENTIALS = process.env.MONGO_CREDENTIALS;
 
@@ -19,24 +21,24 @@ mongoose.connect(`mongodb+srv://${MONGO_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net
 	useNewUrlParser: true,
 });
 
-//  MySQL create database and fill with tables
-buildDatabase.createDatabase();
-buildDatabase.createTables();
+// MySQLL create database and fill with tables
+db.createDatabase();
+db.createTables();
 
 // Body Parser setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // CORS fix for dummy vanilla html/js frontend httpserver to access API endpoints
-app.use(cors({origin: 'http://localhost'}));
+app.use(cors({origin: 'http://localhost:8080'}));
 
-// Serving static files
+// Serving static files if needed
 app.use(express.static('public'));
 
 routes(app);
 
 app.get('/', (req, res) =>
-	res.send(`To access client go to http://localhost port 80 in the browser`)
+	res.send(`To access client go to http://localhost:8080`)
 );
 
 app.listen(PORT, () =>

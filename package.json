@@ -4,9 +4,10 @@
   "description": "Coder Drinkshop App",
   "main": "src/index.js",
   "scripts": {
+    "start": "npm run dummy & npm run serve-dev",
     "babel-node": "babel-node --presets=@babel/preset-env",
-    "start": "nodemon ./src/index.js --exec babel-node -e js",
-    "dummy": "http-server ./dummy-client -p 80",
+    "serve-dev": "nodemon ./src/index.js --exec babel-node -e js",
+    "dummy": "http-server ./dummy-client",
     "dockmysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=thepassword -d mysql"
   },
   "repository": {
@@ -33,6 +34,9 @@
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
-    "http-server": "^0.12.1"
+    "@babel/register": "^7.8.3",
+    "chai": "^4.2.0",
+    "http-server": "^0.12.1",
+    "mocha": "^7.0.1"
   }
 }

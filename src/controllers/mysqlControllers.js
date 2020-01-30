@@ -5,21 +5,26 @@ dotenv.config();
 
 const settings = JSON.parse(process.env.MYSQL_CREDENTIALS);
 settings.database = 'drinkshop';
-const cloudDb = mysql.createConnection(settings);
+export default cruds;
 
-export const cruds = () => {
-	function insertProduct(data, callback) {
-		const values = Object.entries(data);
-		const sql = `INSERT INTO products (title, price) VALUES ?`;
+function cruds() {
+	function insertProduct(data) {
+		const cloudDb = mysql.createConnection(settings);
+		const value = [[data.title, Number(data.price)]];
 		cloudDb.connect(err => {
-			cloudDb.query(sql, [values], (err, result) => {
+			if (err) throw err;
+			const sql = 'INSERT INTO products (title, price) VALUES ?';
+			console.log('connected for insertion');
+			cloudDb.query(sql, [value], (err, result) => {
 				if (err) throw err;
+				console.log(result);
 				console.log("Inserted new product(s)");
 			});
+			cloudDb.end();
 		});
 	}
 
-	function createTables() {
+	function deleteProduct() {
 		const sql = `
 
 		`;

@@ -4,15 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const settings = JSON.parse(process.env.MYSQL_CREDENTIALS);
-const dbName = "drinkshop"
-const buildDatabase = dbClosureFunction();
+// By executing the closure function on import the function's return object is assigned in that namespace.
+// It could also be executed at export, but by doing it this way it's like conventional class instantiation.
+// To me it's elegant but it might be bad practice. Nonetheless, it's good practice learning about closures,
+// In JS they are more reliable way to handle encapsulation than private methods and properties in classes.
 export default buildDatabase;
 
-function dbClosureFunction() {
+function buildDatabase(dbName) {
 	function createDatabase() {
 		const cloudDb = mysql.createConnection(settings);
 		cloudDb.connect(err => {
-			cloudDb.query("CREATE DATABASE IF NOT EXISTS test", (err, result) => {
+			cloudDb.query(`CREATE DATABASE IF NOT EXISTS ${dbName}`, (err, result) => {
 				if (err) throw err;
 				console.log("Database - check!");
 			});
