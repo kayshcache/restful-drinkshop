@@ -1,25 +1,12 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-import mongoose from 'mongoose';
-import mysql from 'mysql2';
 import routes from './routes/drinkshopRoutes';
 import buildDatabase from './models/createSchema';
-
-dotenv.config();
 
 const app = express();
 const dbName = 'drinkshop';
 const db = buildDatabase(dbName);
 const PORT = 3000;
-const MONGO_CREDENTIALS = process.env.MONGO_CREDENTIALS;
-
-// Mongoose connection
-mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${MONGO_CREDENTIALS}@coder-g8zwo.gcp.mongodb.net/restful-drinkshop?retryWrites=true&w=majority`, {
-	useUnifiedTopology: true,
-	useNewUrlParser: true,
-});
 
 // MySQLL create database and fill with tables
 db.createDatabase();

@@ -10,8 +10,7 @@ export default cruds;
 function cruds() {
 	function insertProduct(req, res) {
 		const cloudDb = mysql.createConnection(settings);
-		const {title, price} = req.body;
-		const value = [[title, Number(price)]];
+		const value = [Object.values(req.body)];
 		cloudDb.connect(err => {
 			if (err) throw err;
 			const sql = 'INSERT INTO products (title, price) VALUES ?';
@@ -24,6 +23,23 @@ function cruds() {
 		});
 	}
 
+	function insertCustomer(req, res) {
+		const cloudDb = mysql.createConnection(settings);
+		const {name, email, address} = req.body;
+		const values = [name, email, address];
+		cloudDb.connect(err => {
+			if (err) throw err;
+			const sql = 'INSERT INTO customers (name, email, address) VALUES ?';
+			cloudDb.query(sql, [[values]], (err, result) => {
+				if (err) throw err;
+				console.log(`Customer inserted "${name}" with customer_id: ` + result.insertId);
+				res.json(result);
+			});
+			cloudDb.end();
+		});
+	}
+
+
 	function selectAll(req, res) {
 		const cloudDb = mysql.createConnection(settings);
 		cloudDb.connect(err => {
@@ -33,7 +49,6 @@ function cruds() {
 			cloudDb.query(`SELECT * FROM ${req.originalUrl.slice(1, req.originalUrl.length-1)}`, (err, result, fields) => {
 				if (err) res.send(err);
 				res.json(result);
-				console.log(result);
 			});
 			cloudDb.end();
 		});
@@ -42,28 +57,50 @@ function cruds() {
 	// Have access this req.params.productId
 	function deleteRecord(req, res) {
 		const cloudDb = mysql.createConnection(settings);
-		console.log("connected for deleting");
 		cloudDb.connect(err => {
 			if (err) throw err;
 			// Request params must go into the callback.
-			console.log(req.params);
-			console.log(req.params.product_id);
 			cloudDb.query(`
 				DELETE FROM products
 				WHERE product_id = '${req.params.product_id}'`, (err, result, fields) => {
 				if (err) res.send(err);
-				res.json(result);
-				console.log(result);
+				res.json(result.affectedRows && 'Record deleted' || 'No record by that ID');
 			});
 			cloudDb.end();
 		});
 	}
-	
+
+	function updatePrice(req, res) {
+		const cloudDb = mysql.createConnection(settings);
+		cloudDb.connect(err => {
+			if (err) throw err;
+			cloudDb.query(`UPDATE products SET price = '1.05' WHERE product_id = '${req.params.product_id}'`, (err, result) => {
+				if (err) res.send(err);
+				res.json(result);
+			});
+			cloudDb.end();
+		});
+	}
+
+	function getAveragePrice(req, res) {
+		const cloudDb = mysql.createConnection(settings);
+		cloudDb.connect(err => {
+			if (err) throw err;
+			cloudDb.query(`SELECT AVG(price) FROM products`, (err, result, fields) => {
+				if (err) res.send(err);
+				res.json(result);
+			});
+			cloudDb.end();
+		});
+	}
 
 	return {
 		insertProduct,
+		insertCustomer,
 		selectAll,
+		getAveragePrice,
 		deleteRecord,
+		updatePrice,
 	};
 }
 
