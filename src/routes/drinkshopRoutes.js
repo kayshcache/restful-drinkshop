@@ -1,6 +1,8 @@
 import { addNewProduct, getProducts, getProductWithId, updateProduct, deleteProduct } from '../controllers/drinkshopController';
 import { getCustomers, getCustomerByEmail } from '../controllers/drinkshopController';
-import { cruds } from '../controllers/mysqlControllers';
+import cruds from '../controllers/mysqlControllers';
+
+const db = cruds();
 
 const routes = (app) => {
 	/* Drinkshop Home Route
@@ -11,18 +13,18 @@ const routes = (app) => {
 	 * mongoDB collection
 	 * 
 	 * */
-	app.route('/products')
+	app.route('/products/')
 		.get((req, res, next) => {
 			// Customer Middleware can go here too!
 			console.log(`Request from: ${req.originalUrl}`);
 			console.log(`Request type: ${req.method}`);
 			next();
-		}, getProducts)
+		}, db.selectAll)
 
 		// Products - POST endpoint
-		.post(addNewProduct);
+		.post(db.insertProduct);
 
-	app.route('/products/:productId')
+	app.route('/products/:product_id')
 
 		// Products ID - GET specific contact by id
 		.get(getProductWithId)
@@ -31,7 +33,11 @@ const routes = (app) => {
 		.put(updateProduct)
 
 		// Product id - DELETE request
-		.delete(deleteProduct);
+		.delete((req, res, next) => {
+			console.log(`Request from: ${req.originalUrl}`);
+			console.log(`Request type: ${req.method}`);
+			next();
+		}, db.deleteRecord);
 
 	app.route('/customers/')
 		.get((req, res, next) => {

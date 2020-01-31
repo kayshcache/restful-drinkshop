@@ -8,36 +8,62 @@ settings.database = 'drinkshop';
 export default cruds;
 
 function cruds() {
-	function insertProduct(data) {
+	function insertProduct(req, res) {
 		const cloudDb = mysql.createConnection(settings);
-		const value = [[data.title, Number(data.price)]];
+		const {title, price} = req.body;
+		const value = [[title, Number(price)]];
 		cloudDb.connect(err => {
 			if (err) throw err;
 			const sql = 'INSERT INTO products (title, price) VALUES ?';
-			console.log('connected for insertion');
 			cloudDb.query(sql, [value], (err, result) => {
 				if (err) throw err;
-				console.log(result);
-				console.log("Inserted new product(s)");
+				console.log(`Product inserted "${title}" with product_id: ` + result.insertId);
+				res.json(result);
 			});
 			cloudDb.end();
 		});
 	}
 
-	function deleteProduct() {
-		const sql = `
-
-		`;
+	function selectAll(req, res) {
+		const cloudDb = mysql.createConnection(settings);
 		cloudDb.connect(err => {
-			cloudDb.query(sql, (err, result) => {
-				if (err) throw err;
-				console.log("Tables schema - check!");
+			if (err) throw err;
+			// Fetching the table name from the request object makes this function reusable!
+			// Unfortunately ugly though because must go into the callback.
+			cloudDb.query(`SELECT * FROM ${req.originalUrl.slice(1, req.originalUrl.length-1)}`, (err, result, fields) => {
+				if (err) res.send(err);
+				res.json(result);
+				console.log(result);
 			});
+			cloudDb.end();
 		});
 	}
 
+	// Have access this req.params.productId
+	function deleteRecord(req, res) {
+		const cloudDb = mysql.createConnection(settings);
+		console.log("connected for deleting");
+		cloudDb.connect(err => {
+			if (err) throw err;
+			// Request params must go into the callback.
+			console.log(req.params);
+			console.log(req.params.product_id);
+			cloudDb.query(`
+				DELETE FROM products
+				WHERE product_id = '${req.params.product_id}'`, (err, result, fields) => {
+				if (err) res.send(err);
+				res.json(result);
+				console.log(result);
+			});
+			cloudDb.end();
+		});
+	}
+	
+
 	return {
 		insertProduct,
+		selectAll,
+		deleteRecord,
 	};
 }
 

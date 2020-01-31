@@ -106,7 +106,7 @@ const createOrderList = customerObject => {
 const appendListItemsToDom = productObject => {
 	const menu = document.querySelector('#xhr-menu')
 	const item = document.createElement('li')
-	item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
+	item.textContent = `${productObject.title}: $${productObject.price}`;
 	menu.appendChild(item);
 }
 
@@ -116,7 +116,7 @@ const appendListItemsToDom = productObject => {
 const appendFetch = productObject => {
 	const menu = document.querySelector('#fetch-menu')
 	const item = document.createElement('li')
-	item.textContent = `${productObject.title}: $${productObject.price.toFixed(2)}`;
+	item.textContent = `${productObject.title}: $${productObject.price}`;
 	menu.appendChild(item);
 	return item;
 }

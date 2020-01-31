@@ -57,6 +57,7 @@ function buildDatabase(dbName) {
 				if (err) throw err;
 				console.log("Tables schema - check!");
 			});
+			cloudDb.end();
 		});
 	}
 

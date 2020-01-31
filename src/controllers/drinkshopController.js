@@ -11,6 +11,7 @@ const Customer = mongoose.model('Customer', CustomerSchema);
 
 export const addNewProduct = (req, res) => {
 	db.insertProduct(req.body);
+	/*
 	let newProduct = new Product(req.body);
 
 	newProduct.save((err, product) => {
@@ -19,17 +20,20 @@ export const addNewProduct = (req, res) => {
 		}
 		res.json(product);
 	});
+	*/
 };
 
 export const getProducts = (req, res) => {
 	// Can pass search params as an object
 	// Second arg is callback function declaration
-	Product.find({}, (err, product) => {
+	/*Product.find({}, (err, product) => {
 		if (err) {
 			res.send(err);
 		}
 		res.json(product);
 	});
+	*/
+	db.listProducts(res);
 };
 
 export const getProductWithId = (req, res) => {
