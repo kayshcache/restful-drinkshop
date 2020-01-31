@@ -4,9 +4,11 @@
   "description": "Coder Drinkshop App",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm run dummy & npm run serve-dev",
+    "start": "npm run dummy & npm run dev",
+    "serve-dev": "npm run dummy & npm run dev",
     "babel-node": "babel-node --presets=@babel/preset-env",
-    "serve-dev": "nodemon ./src/index.js --exec babel-node -e js",
+    "dev": "nodemon ./src/index.js --exec babel-node -e js",
+    "prod": "node ./src/index.js --exec babel-node -e js",
     "dummy": "http-server ./dummy-client",
     "dockmysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=thepassword -d mysql"
   },

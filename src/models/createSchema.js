@@ -26,8 +26,8 @@ function buildDatabase(dbName) {
 		const sql = `
 			CREATE TABLE IF NOT EXISTS products (
 			  product_id INT AUTO_INCREMENT PRIMARY KEY,
-			  title VARCHAR(45),
-			  price DECIMAL(4,2)
+			  title VARCHAR(45) DEFAULT NULL,
+			  price DECIMAL(4,2) DEFAULT NULL
 			);
 
 			CREATE TABLE IF NOT EXISTS customers (
@@ -41,12 +41,11 @@ function buildDatabase(dbName) {
 			CREATE TABLE IF NOT EXISTS orders (
 			  order_id INT AUTO_INCREMENT PRIMARY KEY,
 			  customer_id INT NOT NULL,
-			  status VARCHAR(45) NULL DEFAULT 'processing',
+			  order_status VARCHAR(45) NULL DEFAULT 'processing',
 			  customer_notes VARCHAR(255) NULL
 			);
 
 			CREATE TABLE IF NOT EXISTS orders_products (
-			  orders_products_id INT PRIMARY KEY AUTO_INCREMENT,
 			  order_id INT NULL,
 			  product_id INT NULL,
 			  quantity INT NULL

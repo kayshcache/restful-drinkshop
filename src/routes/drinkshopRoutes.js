@@ -31,7 +31,8 @@ const routes = (app) => {
 		.post(logRequest, db.insertCustomer);
 
 	app.route('/orders/')
-		.get(logRequest, db.selectAll);
+		.get(logRequest, db.selectOrders)
+		.post(logRequest, db.insertOrder);
 };
 
 // Handmade middleware
