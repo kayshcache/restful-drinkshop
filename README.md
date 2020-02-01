@@ -23,8 +23,9 @@ This application demonstrates CRUD operations with relational databases using No
 Discuss how the application will handle the privacy of user data within the system, and how security features of the frameworks you are utilising will assist to mitigate security concerns.
 
 Example: discuss how the use of ORMs mitigate SQL injection attacks, and how API frameworks such as ExpressJS can handle the sanitisation of user input.
-### Answer
-Stuff about security tacks on to become CySec content yay!
+### No. 2 Answer
+When using an ORM or module within the Node/Express framework pattern of developing APIs, it's possible to use the built-in placeholders to escape potentially dangerous user input from being passed to an SQL query. The module 'mysql2' used in this application can also employ "named placeholders" to effectively _parametize_ variable strings as they are destructured into the queries.  
+
 ## Requirement Number Three (#3)
 ### Professional report which provides an analysis of privacy and security concerns
 #### Description of requirement:
