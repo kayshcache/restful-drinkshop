@@ -9,16 +9,20 @@ function main() {
 			.then(products => products.map(appendListItemsToDom));
 			displayList('/products/');
 			displayList('/average/');
+			displayTable('/products/');
 			console.log(location.search.slice(4));
 			break;
 		case '/customers.html':
 			displayList('/customers/');
+			displayTable('/customers/');
 			break;
 		case '/orders.html':
 			displayList('/orders/');
+			displayTable('/orders/');
 			break;
 		case '/order.html':
 			displayList(`/orders/${location.search.slice(4)}`);
+			displayTable(`/orders/${location.search.slice(4)}`);
 			break;
 		default:
 			console.log('something is up with the switch');
@@ -52,7 +56,7 @@ async function displayList(endpoint) {
 	const uri = api + endpoint;
 	const response = await fetch(uri);
 	const list = await response.json();
-	const listItems = list.map(obj => {
+	list.forEach(obj => {
 		const selector = endpoint == '/average/' && '#average' || '#main-list';
 		const htmlList = document.querySelector(selector);
 		const item = document.createElement('li');
@@ -64,7 +68,45 @@ async function displayList(endpoint) {
 			item.appendChild(link);
 		}
 		htmlList.appendChild(item);
-		return item;
+	});
+}
+
+async function displayTable(endpoint) {
+	const uri = api + endpoint;
+	const response = await fetch(uri);
+	const data = await response.json();
+
+	// Table data creation
+	const selector = endpoint == '/average/' && '#average' || '#main-table';
+	const table = document.querySelector(selector);
+
+	// Table head from response object keys
+	const tableHeader = table.createTHead();
+	const headerRow = tableHeader.insertRow();
+	Object.keys(data[0]).forEach(headingKey => {
+		const headerCell = headerRow.insertCell();
+		headerCell.innerHTML = headingKey;
+	});
+	const headerDetails = headerRow.insertCell();
+	headerDetails.innerHTML = 'Details';
+
+	// Fill the table with the values from the response object
+	data.forEach(obj => {
+		const tableRow = document.createElement('TR');
+		Object.values(obj).forEach(value => {
+			const cell = document.createElement('TD');
+			cell.innerHTML = value;
+			tableRow.appendChild(cell);
+		});
+		if(endpoint == '/orders/') {
+			const link = document.createElement('A');
+			link.text = 'Order Breakdown';
+			link.href = `order.html?id=${obj.orderNumber}`;
+			const detailCell = document.createElement('TD');
+			detailCell.appendChild(link);
+			tableRow.appendChild(detailCell);
+		}
+		table.appendChild(tableRow);
 	});
 }
 
