@@ -2,35 +2,32 @@
 
 const api = 'http://localhost:3000';
 
-function main() {
+// An immediately invoked main function expression for the fun of it.
+(function() {
 	switch (location.pathname) {	
 		case '/':
 			getRequestFrom(api, '/products/')
 			.then(products => products.map(appendListItemsToDom));
-			displayList('/products/');
-			displayList('/average/');
+			displayTable('/average/');
 			displayTable('/products/');
 			console.log(location.search.slice(4));
 			break;
 		case '/customers.html':
-			displayList('/customers/');
 			displayTable('/customers/');
 			break;
 		case '/orders.html':
-			displayList('/orders/');
 			displayTable('/orders/');
 			break;
 		case '/order.html':
-			displayList(`/orders/${location.search.slice(4)}`);
 			displayTable(`/orders/${location.search.slice(4)}`);
 			break;
 		default:
 			console.log('something is up with the switch');
 	}
-}
+})();
 
 // Old school XHR for the fun of it combined with Promise instead of jQuery
-const getRequestFrom = (url, route) => {
+function getRequestFrom(url, route) {
 	const uri = url + route;
 	return new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
@@ -42,41 +39,21 @@ const getRequestFrom = (url, route) => {
 }
 
 // Map callback for making the XHR version of the menu ftw!
-const appendListItemsToDom = productObject => {
+function appendListItemsToDom(productObject) {
 	const menu = document.querySelector('#xhr-menu')
 	const item = document.createElement('li')
 	item.textContent = `${productObject.title}: ${productObject.price}`;
 	menu.appendChild(item);
 }
 
-main();
-
-// Generic API request and listify the response for DOM
-async function displayList(endpoint) {
-	const uri = api + endpoint;
-	const response = await fetch(uri);
-	const list = await response.json();
-	list.forEach(obj => {
-		const selector = endpoint == '/average/' && '#average' || '#main-list';
-		const htmlList = document.querySelector(selector);
-		const item = document.createElement('li');
-		item.textContent = Object.entries(obj).join(': ');
-		if(obj.orderNumber) {
-			const link = document.createElement('A');
-			link.text = 'Order Breakdown';
-			link.href = `order.html?id=${obj.orderNumber}`;
-			item.appendChild(link);
-		}
-		htmlList.appendChild(item);
-	});
-}
-
+// Generic API request and tabularize the response for DOM
 async function displayTable(endpoint) {
+	// Fetch the JSON response object and parse to Javascript object
 	const uri = api + endpoint;
 	const response = await fetch(uri);
 	const data = await response.json();
 
-	// Table data creation
+	// Select the table tag in DOM
 	const selector = endpoint == '/average/' && '#average' || '#main-table';
 	const table = document.querySelector(selector);
 
@@ -87,10 +64,12 @@ async function displayTable(endpoint) {
 		const headerCell = headerRow.insertCell();
 		headerCell.innerHTML = headingKey;
 	});
-	const headerDetails = headerRow.insertCell();
-	headerDetails.innerHTML = 'Details';
+	if(endpoint == '/orders/') {
+		const headerDetails = headerRow.insertCell();
+		headerDetails.innerHTML = 'Details';
+	}
 
-	// Fill the table with the values from the response object
+	// Fill the table with rows from the database records - values from the response object
 	data.forEach(obj => {
 		const tableRow = document.createElement('TR');
 		Object.values(obj).forEach(value => {
