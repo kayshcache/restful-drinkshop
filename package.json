@@ -10,7 +10,7 @@
     "dev": "nodemon ./src/index.js --exec babel-node -e js",
     "prod": "node ./src/index.js --exec babel-node -e js",
     "dummy": "http-server ./dummy-client",
-    "dockmysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=thepassword -d mysql"
+    "dockmysql": "docker run --name mysql -p 3406:3306 -e MYSQL_ROOT_PASSWORD=****** -d mysql"
   },
   "repository": {
     "type": "git",
